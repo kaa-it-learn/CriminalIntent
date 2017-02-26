@@ -1,11 +1,13 @@
 package com.akruglov.criminalintent;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,8 +104,16 @@ public class CrimeListFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
         if (requestCode == REQUEST_CRIME) {
             int crimePosition = CrimeFragment.getCrimePosition(data);
+            if (crimePosition < 0) {
+                return;
+            }
+            Log.d("CLF", "position: " + crimePosition);
             mAdapter.notifyItemChanged(crimePosition);
         }
     }

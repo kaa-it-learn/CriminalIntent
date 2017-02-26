@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,9 @@ import java.util.UUID;
  */
 
 public class CrimePagerActivity extends FragmentActivity {
+
+
+    public static final String TAG = "CPA";
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
@@ -40,6 +44,8 @@ public class CrimePagerActivity extends FragmentActivity {
         UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
         int crimePosition = getIntent().getIntExtra(EXTRA_CRIME_POSITION, 0);
 
+        Log.d(TAG, "onCreate crimePosition: " + crimePosition);
+
         mViewPager = (ViewPager) findViewById(R.id.activity_crime_pager_view_pager);
         mCrimes = CrimeLab.get(this).getCrimes();
 
@@ -59,5 +65,35 @@ public class CrimePagerActivity extends FragmentActivity {
         });
 
         mViewPager.setCurrentItem(crimePosition);
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        super.onDestroy();
     }
 }
