@@ -49,10 +49,6 @@ public class CrimeFragment extends Fragment {
         return fragment;
     }
 
-    public static int getCrimePosition(Intent result) {
-        return result.getIntExtra(ARG_CRIME_ID, -1);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +80,6 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mCrime.setTitle(s.toString());
-                returnResult();
             }
 
             @Override
@@ -111,7 +106,6 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
-                returnResult();
             }
         });
 
@@ -124,24 +118,6 @@ public class CrimeFragment extends Fragment {
         mDateButton.setText(date);
     }
 
-    private void returnResult() {
-        if (!isVisible()) {
-            return;
-        }
-
-        if (getActivity() == null) {
-            return;
-        }
-
-        int crimePosition = getArguments().getInt(ARG_CRIME_POSITION);
-
-        Log.d(TAG, "returnResult position: " + crimePosition);
-
-        Intent intent = new Intent();
-        intent.putExtra(ARG_CRIME_ID, crimePosition);
-        getActivity().setResult(Activity.RESULT_OK, intent);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) {
@@ -152,7 +128,6 @@ public class CrimeFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDate();
-            returnResult();
         }
     }
 }
