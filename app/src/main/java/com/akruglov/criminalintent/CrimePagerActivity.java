@@ -21,13 +21,13 @@ import java.util.UUID;
 public class CrimePagerActivity extends FragmentActivity {
 
 
-    public static final String TAG = "CPA";
-
-    private ViewPager mViewPager;
-    private List<Crime> mCrimes;
+    private static final String TAG = "CrimePagerActivity";
 
     private static final String EXTRA_CRIME_ID = "com.akruglov.criminalintent.crime_id";
     private static final String EXTRA_CRIME_POSITION = "com.akruglov.criminalintent.crime_position";
+
+    private ViewPager mViewPager;
+    private List<Crime> mCrimes;
 
     public static Intent newIntent(Context packageContext, UUID crimeId, int crimePosition) {
         Intent intent = new Intent(packageContext, CrimePagerActivity.class);
@@ -39,12 +39,13 @@ public class CrimePagerActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crime_pager);
 
         UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
         int crimePosition = getIntent().getIntExtra(EXTRA_CRIME_POSITION, 0);
 
         Log.d(TAG, "onCreate crimePosition: " + crimePosition);
+
+        setContentView(R.layout.activity_crime_pager);
 
         mViewPager = (ViewPager) findViewById(R.id.activity_crime_pager_view_pager);
         mCrimes = CrimeLab.get(this).getCrimes();

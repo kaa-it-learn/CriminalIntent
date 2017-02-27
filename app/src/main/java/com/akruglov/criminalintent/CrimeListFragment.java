@@ -13,10 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by akruglov on 2/25/17.
@@ -24,7 +22,12 @@ import java.util.UUID;
 
 public class CrimeListFragment extends Fragment {
 
+    private static String TAG = "CrimeListFragment";
+
     private static final int REQUEST_CRIME = 1;
+
+    private RecyclerView mCrimeRecyclerView;
+    private CrimeAdapter mAdapter;
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -84,9 +87,6 @@ public class CrimeListFragment extends Fragment {
             return mCrimes.size();
         }
     }
-
-    private RecyclerView mCrimeRecyclerView;
-    private CrimeAdapter mAdapter;
 
     @Nullable
     @Override

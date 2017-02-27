@@ -27,6 +27,8 @@ import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
 
+    private static final String TAG = "CrimeFragment";
+
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String ARG_CRIME_POSITION = "crime_position";
     private static final String DIALOG_DATE = "DialogDate";
@@ -36,8 +38,6 @@ public class CrimeFragment extends Fragment {
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
-    private int mCrimePosition = -1;
-    private boolean mIsVisible = true;
 
     public static CrimeFragment newInstance(UUID crimeId, int crimePosition) {
         Bundle args = new Bundle();
@@ -58,8 +58,8 @@ public class CrimeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
-        mCrimePosition = getArguments().getInt(ARG_CRIME_POSITION);
-        Log.d("CPA_CF", "onCreate mCrimePosition: " + mCrimePosition);
+        int crimePosition = getArguments().getInt(ARG_CRIME_POSITION);
+        Log.d(TAG, "onCreate crimePosition: " + crimePosition);
     }
 
     @Nullable
@@ -68,13 +68,7 @@ public class CrimeFragment extends Fragment {
                              @Nullable final ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        //Log.d("CF", "onCreateView");
-
-        if (savedInstanceState != null) {
-            mCrimePosition = savedInstanceState.getInt(ARG_CRIME_POSITION);
-        }
-
-        Log.d("CPA_CF", "onCreateView " + mCrimePosition);
+        Log.d(TAG, "onCreateView " + getArguments().getInt(ARG_CRIME_POSITION));
 
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
 
@@ -90,7 +84,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mCrime.setTitle(s.toString());
-                if (mIsVisible) returnResult();
+                returnResult();
             }
 
             @Override
@@ -117,7 +111,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
-                if (mIsVisible) returnResult();
+                returnResult();
             }
         });
 
@@ -131,14 +125,20 @@ public class CrimeFragment extends Fragment {
     }
 
     private void returnResult() {
+        if (!isVisible()) {
+            return;
+        }
+
         if (getActivity() == null) {
             return;
         }
 
-        Log.d("CPA_CF", "returnResult position: " + mCrimePosition);
+        int crimePosition = getArguments().getInt(ARG_CRIME_POSITION);
+
+        Log.d(TAG, "returnResult position: " + crimePosition);
 
         Intent intent = new Intent();
-        intent.putExtra(ARG_CRIME_ID, mCrimePosition);
+        intent.putExtra(ARG_CRIME_ID, crimePosition);
         getActivity().setResult(Activity.RESULT_OK, intent);
     }
 
@@ -152,25 +152,7 @@ public class CrimeFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDate();
-            if (mIsVisible) returnResult();
+            returnResult();
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(ARG_CRIME_POSITION, mCrimePosition);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onPause() {
-        //mIsVisible = false;
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        //mIsVisible = true;
-        super.onResume();
     }
 }
